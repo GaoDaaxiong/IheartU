@@ -1,22 +1,22 @@
 {
-  "name": "IheratU - 生日快乐小游戏",
-  "short_name": "IheratU",
+  "name": "IheartU - 生日快乐小游戏",
+  "short_name": "IheartU",
   "description": "一个温馨的生日祝福小游戏",
-  "start_url": "/IheratU/",
-  "scope": "/IheratU/",
+  "start_url": "/IheartU/",
+  "scope": "/IheartU/",
   "display": "standalone",
   "background_color": "#333333",
   "theme_color": "#ff7f29",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "/IheratU/favicon.png",
+      "src": "/IheartU/favicon.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/IheratU/thumbnail.png",
+      "src": "/IheartU/thumbnail.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

@@ -1,10 +1,10 @@
-# # 🎂 IheratU - 生日快乐互动小游戏
+# # 🎂 IheartU - 生日快乐互动小游戏
 
 一个温馨的生日祝福互动小游戏，通过解谜闯关的方式，让玩家走出"HBD💗U"的轨迹，最后呈现生日祝福。
 
 ## 🎮 在线体验
 
-**网页版：** [https://gaodaaxiong.github.io/IheratU/](https://gaodaaxiong.github.io/IheratU/)
+**网页版：** [https://gaodaaxiong.github.io/IheartU/](https://gaodaaxiong.github.io/IheartU/)
 
 **PWA版：** 支持安装到手机桌面，离线使用
 
@@ -75,7 +75,7 @@
 ## 📂 项目结构
 
 ```
-IheratU/
+IheartU/
 ├── index.html              # 主页面
 ├── manifest.json           # PWA应用清单
 ├── service-worker.js       # Service Worker
@@ -134,8 +134,8 @@ IheratU/
 
 ### 克隆项目
 ```bash
-git clone https://github.com/GaoDaaxiong/IheratU.git
-cd IheratU
+git clone https://github.com/GaoDaaxiong/IheartU.git
+cd IheartU
 ```
 
 ### 启动本地服务器

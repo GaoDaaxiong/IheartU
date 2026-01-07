@@ -1,5 +1,5 @@
-const CACHE_NAME = 'iheratu-v2';
-const BASE_PATH = '/IheratU';
+const CACHE_NAME = 'iheartu-v1';
+const BASE_PATH = '/IheartU';
 const urlsToCache = [
   `${BASE_PATH}/`,
   `${BASE_PATH}/index.html`,
