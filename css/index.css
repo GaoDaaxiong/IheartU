@@ -1,0 +1,472 @@
+body {
+	margin: 0;
+
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: 100;
+
+	overflow: hidden;
+
+}
+
+canvas {
+	margin-right: 20px;
+	box-sizing: border-box;
+	transition: all 0.8s ease-in-out;
+	flex-shrink: 0;
+	/* 禁止伸缩，防止 Canvas 挤压重叠 */
+	width: 300px;
+}
+
+canvas:last-child {
+	margin-right: 0;
+}
+
+canvas.locked {
+	filter: invert(1) contrast(0.9);
+	/* 黑白反转：背景变黑，线条变白 */
+	opacity: 0.6;
+	/* 稍微调暗，增加未解锁的神秘感 */
+}
+
+#whole_container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	-webkit-transition: top 1s ease-in-out;
+	-moz-transition: top 1s ease-in-out;
+	-ms-transition: top 1s ease-in-out;
+	transition: top 1s ease-in-out;
+}
+
+#screen_one,
+#screen_two,
+#screen_three {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	/* 还原为相对布局，支持原始的整体平滑位移 */
+	/* 全平台统一使用 absolute 叠层，避免滚动偏移 */
+	top: 0;
+	left: 0;
+	display: block;
+}
+
+#screen_one {
+	background-color: #bbb;
+}
+
+#screen_two {
+	background: #333;
+}
+
+#screen_three {
+	background: #fff;
+}
+
+#canvas_container {
+	width: 1580px;
+	height: 380px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	/* 默认绝对居中 */
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: visible;
+	/* 允许溢出，防止缩放裁剪 */
+}
+
+#valentines_text,
+#rewind_text,
+#replay_text {
+	display: none;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+	color: #666;
+	font-size: 30px;
+	text-align: center;
+	letter-spacing: 0px;
+
+	-webkit-transition: letter-spacing 5s ease-out;
+	-moz-transition: letter-spacing 5s ease-out;
+	-ms-transition: letter-spacing 5s ease-out;
+	transition: letter-spacing 5s ease-out;
+
+}
+
+#rewind_text,
+#replay_text {
+	color: #ccc;
+	letter-spacing: 2px;
+	/*text-align: left;*/
+}
+
+#end_container {
+	width: 800px;
+	height: 550px;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	font-size: 25px;
+
+	text-align: center;
+}
+
+#support {
+	font-size: 30px;
+	color: #fff;
+	background: #ff7f29;
+	padding: 10px;
+	width: 320px;
+	border-radius: 10px;
+	margin: 10px auto;
+	cursor: pointer;
+
+	position: relative;
+	top: 0px;
+
+	text-decoration: none;
+
+	-webkit-transition: all 0.1s ease-out;
+	-moz-transition: all 0.1s ease-out;
+	-ms-transition: all 0.1s ease-out;
+	transition: all 0.1s ease-out;
+
+}
+
+#support:hover {
+	background: #ffce87;
+	top: -3px;
+}
+
+input#your_message {
+	display: block;
+	width: 100%;
+	font-size: 30px;
+	padding: 5px;
+	border: 2px solid #ddd;
+	margin: 5px 0 40px 0;
+
+	color: #666;
+	padding-top: 8px;
+
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: 100;
+
+	text-align: center;
+}
+
+input#your_link {
+	display: block;
+	width: 100%;
+	font-size: 15px;
+	padding: 5px;
+	background: #ddd;
+	border: none;
+	margin: 5px 0 40px 0;
+
+	color: #666;
+
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: 100;
+
+	text-align: center;
+}
+
+#share {
+	width: 330px;
+	margin: 5px auto;
+	height: 50px;
+	margin-bottom: 30px;
+}
+
+#share>div {
+	float: left;
+	width: 50px;
+	height: 50px;
+	margin-right: 5px;
+
+	opacity: 0.25;
+	position: relative;
+	top: 0;
+	cursor: pointer;
+
+	-webkit-transition: all 0.1s ease-out;
+	-moz-transition: all 0.1s ease-out;
+	-ms-transition: all 0.1s ease-out;
+	transition: all 0.1s ease-out;
+
+}
+
+#share>div:hover {
+	opacity: 0.7;
+	top: -3px;
+}
+
+#share_facebook {
+	background: url(../icons/facebook.png);
+}
+
+#share_twitter {
+	background: url(../icons/twitter.png);
+}
+
+#share_plus {
+	background: url(../icons/plus.png);
+}
+
+#share_tumblr {
+	background: url(../icons/tumblr.png);
+}
+
+#share_reddit {
+	background: url(../icons/reddit.png);
+}
+
+#share_stumbleupon {
+	background: url(../icons/stumbleupon.png);
+	margin-right: 0px;
+}
+
+#bottom {
+	font-size: 17px;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	color: #999;
+}
+
+#bottom a {
+	color: #aaa;
+}
+
+#bottom a:hover {
+	color: #ccc;
+}
+
+#loading {
+	position: fixed;
+	top: 0;
+	left: 0;
+
+	width: 100%;
+	height: 100%;
+
+	background: #333;
+	color: #fff;
+	font-size: 30px;
+	letter-spacing: 5px;
+	text-align: center;
+
+	z-index: 1;
+}
+
+#loading>div {
+	position: absolute;
+	margin: auto;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	width: 100%;
+	height: 50px;
+}
+
+/* =========================================
+   Mobile Adaptation Styles (Portrait: Play / Landscape: Replay)
+   ========================================= */
+
+/* 1. Start & Finish Overlays */
+#start_overlay,
+#finish_overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.9);
+	z-index: 9500;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: opacity 0.5s;
+	text-align: center;
+}
+
+#finish_overlay {
+	display: none;
+}
+
+/* Default hidden */
+
+.finish-card {
+	background: #333;
+	padding: 30px;
+	border-radius: 20px;
+	border: 2px solid #ff7f29;
+	color: #fff;
+	max-width: 80%;
+}
+
+#start_btn,
+#confirm_finish_btn {
+	margin-top: 20px;
+	padding: 15px 30px;
+	font-size: 20px;
+	background: #ff7f29;
+	color: white;
+	border: none;
+	border-radius: 30px;
+	cursor: pointer;
+	font-family: inherit;
+}
+
+/* 2. Dynamic Joystick */
+#joystick_container {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 50%;
+	z-index: 9000;
+	touch-action: none;
+	/* 防止页面滚动 */
+}
+
+/* 2. Fixed D-Pad Controls - iOS Hardened Version */
+#mobile_controls {
+	display: block;
+	/* 默认显示 */
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 2000000;
+	/* 最高层级，突破一切遮挡 */
+	pointer-events: none;
+	-webkit-transform: translateZ(9999px);
+	/* 强制开启 GPU 独立复合层 */
+	transform: translateZ(9999px);
+}
+
+.dpad-btn {
+	position: absolute;
+	width: 80px;
+	height: 80px;
+	background: rgba(255, 255, 255, 0.3);
+	/* 提升对比度 */
+	border: 3px solid rgba(255, 255, 255, 0.6);
+	/* 更加明显的边框 */
+	border-radius: 50%;
+	color: #fff;
+	font-size: 36px;
+	line-height: 76px;
+	text-align: center;
+	user-select: none;
+	-webkit-user-select: none;
+	transition: transform 0.1s, background-color 0.1s;
+	touch-action: none;
+	pointer-events: auto;
+	/* 仅按钮响应 */
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5), inset 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+.dpad-btn:active,
+.dpad-btn.active {
+	background: rgba(255, 255, 255, 0.7);
+	transform: scale(1.15);
+}
+
+/* 布局：完美对称的十字形布局，以屏幕下半部25%为中心 */
+#btn_up {
+	bottom: calc(25% + 90px);
+	left: 50%;
+	transform: translate(-50%, 50%);
+}
+
+#btn_down {
+	bottom: calc(25% - 90px);
+	left: 50%;
+	transform: translate(-50%, 50%);
+}
+
+#btn_left {
+	bottom: 25%;
+	left: calc(50% - 90px);
+	transform: translate(-50%, 50%);
+}
+
+#btn_right {
+	bottom: 25%;
+	left: calc(50% + 90px);
+	transform: translate(-50%, 50%);
+}
+
+/* 3. Mobile Display Strategy - Hard Hide on Big Screen Only */
+@media (min-width: 1101px) {
+	#mobile_controls {
+		display: none !important;
+	}
+}
+
+@media (max-width: 1100px) {
+	#rotate_overlay {
+		display: none !important;
+	}
+
+	#screen_two {
+		height: 50%;
+		overflow: hidden;
+	}
+
+	#canvas_container {
+		overflow: visible;
+		transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+	}
+}
+
+/* 4. Landscape / PC Scale (Replay Mode) */
+@media (orientation: landscape) and (max-width: 1100px) {
+	#joystick_container {
+		display: none !important;
+	}
+
+	#mobile_controls {
+		display: none !important;
+	}
+}
+
+/* 深度修复：全屏隔离系统 (确保背景铺满) */
+@media (max-width: 1100px) {
+	#loading {
+		z-index: 10000;
+	}
+
+	#whole_container {
+		top: 0 !important;
+		width: 100vw;
+		height: 100vh;
+		background: #333;
+	}
+
+	#screen_one,
+	#screen_two,
+	#screen_three {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		display: none;
+	}
+}
