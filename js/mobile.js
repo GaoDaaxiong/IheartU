@@ -104,9 +104,10 @@
         if (isPortrait) {
             // 竖屏回放/重映模式：上3下2布局
             if (stage === 2 || stage === 3 || stage === 4) {
-                // 立即添加类，避免闪烁
+                // 立即添加类并隐藏，避免闪烁
                 if (!canvasContainer.classList.contains("portrait-replay")) {
                     canvasContainer.classList.add("portrait-replay");
+                    canvasContainer.classList.remove("ready");
                 }
                 
                 // 计算缩放：3个canvas一行的宽度 (300*3 + 15*2 gap = 930)
@@ -122,9 +123,15 @@
                 
                 canvasContainer.style.transformOrigin = "center center";
                 canvasContainer.style.transform = "translate(-50%, -50%) scale(" + scale + ")";
+                
+                // 布局完成后显示
+                setTimeout(function() {
+                    canvasContainer.classList.add("ready");
+                }, 50);
             } else {
                 // PORTRAIT 游戏模式: Show current level
                 canvasContainer.classList.remove("portrait-replay");
+                canvasContainer.classList.remove("ready");
                 
                 var targetW = 300;
                 var targetH = 380;
@@ -140,6 +147,7 @@
         } else {
             // LANDSCAPE: Show all 5 levels side-by-side
             canvasContainer.classList.remove("portrait-replay");
+            canvasContainer.classList.remove("ready");
             var targetW = 1580;
             var targetH = 380;
             var scale = Math.min(screenW / targetW, screenH / targetH) * 0.95;
@@ -151,13 +159,6 @@
     // 4. Finish Prompt Logic (竖屏模式下直接开始回放)
     // ============================================
     window.showFinishPrompt = function () {
-        // 提前设置布局类，避免闪烁
-        var canvasContainer = document.getElementById("canvas_container");
-        var isPortrait = window.innerHeight > window.innerWidth;
-        if (canvasContainer && isPortrait) {
-            canvasContainer.classList.add("portrait-replay");
-        }
-
         // Audio Priming for Mobile/iOS
         try {
             createjs.Sound.play("rewind", { volume: 0 }).stop();
@@ -168,7 +169,7 @@
         if (window.triggerRewind) window.triggerRewind();
         
         // 触发布局更新
-        setTimeout(handleResize, 50);
+        setTimeout(handleResize, 10);
     };
 
     // ============================================

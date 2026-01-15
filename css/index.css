@@ -84,14 +84,18 @@ canvas.locked {
 
 /* 竖屏回放模式：上3下2布局 */
 #canvas_container.portrait-replay {
-	width: 940px; /* 3 * 300 + 2 * 20 gap */
-	height: auto;
-	flex-wrap: wrap;
+	width: 940px !important; /* 3 * 300 + 2 * 20 gap */
+	height: auto !important;
+	flex-wrap: wrap !important;
 	justify-content: center;
 	align-content: center;
 	gap: 15px;
-	transition: none;
-	/* 禁用过渡动画 */
+	visibility: hidden;
+	/* 初始隐藏，等布局完成后显示 */
+}
+
+#canvas_container.portrait-replay.ready {
+	visibility: visible;
 }
 
 #canvas_container.portrait-replay canvas {
