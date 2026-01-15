@@ -1,4 +1,4 @@
-const CACHE_NAME = 'iheartu-v2';
+const CACHE_NAME = 'iheartu-v3';
 const BASE_PATH = '/IheartU';
 const urlsToCache = [
   `${BASE_PATH}/`,
