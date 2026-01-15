@@ -25,6 +25,12 @@
                 window.GAME_STARTED = true;
             }
 
+            // 显示方向控制键
+            var mobileControls = document.getElementById("mobile_controls");
+            if (mobileControls && window.innerWidth < 1100) {
+                mobileControls.classList.add("game-started");
+            }
+
             overlay.style.opacity = "0";
             setTimeout(function () { overlay.style.display = "none"; }, 500);
 
@@ -88,8 +94,9 @@
         // 回放/重映阶段 (STAGE 2 或 3) 隐藏方向控制
         if (mobileControls) {
             if (stage === 2 || stage === 3 || stage === 4) {
-                mobileControls.style.display = "none";
-            } else if (screenW < 1100) {
+                mobileControls.classList.remove("game-started");
+            } else if (screenW < 1100 && mobileControls.classList.contains("game-started")) {
+                // 只有在游戏已开始的情况下才显示
                 mobileControls.style.display = "block";
             }
         }
@@ -97,7 +104,10 @@
         if (isPortrait) {
             // 竖屏回放/重映模式：上3下2布局
             if (stage === 2 || stage === 3 || stage === 4) {
-                canvasContainer.classList.add("portrait-replay");
+                // 立即添加类，避免闪烁
+                if (!canvasContainer.classList.contains("portrait-replay")) {
+                    canvasContainer.classList.add("portrait-replay");
+                }
                 
                 // 计算缩放：3个canvas一行的宽度 (300*3 + 15*2 gap = 930)
                 var canvasW = 300;
@@ -141,7 +151,13 @@
     // 4. Finish Prompt Logic (竖屏模式下直接开始回放)
     // ============================================
     window.showFinishPrompt = function () {
-        // 竖屏模式下直接开始回放，不再要求横屏
+        // 提前设置布局类，避免闪烁
+        var canvasContainer = document.getElementById("canvas_container");
+        var isPortrait = window.innerHeight > window.innerWidth;
+        if (canvasContainer && isPortrait) {
+            canvasContainer.classList.add("portrait-replay");
+        }
+
         // Audio Priming for Mobile/iOS
         try {
             createjs.Sound.play("rewind", { volume: 0 }).stop();
@@ -152,7 +168,7 @@
         if (window.triggerRewind) window.triggerRewind();
         
         // 触发布局更新
-        setTimeout(handleResize, 100);
+        setTimeout(handleResize, 50);
     };
 
     // ============================================

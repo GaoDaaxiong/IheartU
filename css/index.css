@@ -78,6 +78,8 @@ canvas.locked {
 	overflow: visible;
 	/* 允许溢出，防止缩放裁剪 */
 	flex-wrap: nowrap;
+	transition: none;
+	/* 禁用过渡动画，避免布局闪烁 */
 }
 
 /* 竖屏回放模式：上3下2布局 */
@@ -88,6 +90,8 @@ canvas.locked {
 	justify-content: center;
 	align-content: center;
 	gap: 15px;
+	transition: none;
+	/* 禁用过渡动画 */
 }
 
 #canvas_container.portrait-replay canvas {
@@ -380,8 +384,8 @@ input#your_link {
 
 /* 2. Fixed D-Pad Controls - iOS Hardened Version */
 #mobile_controls {
-	display: block;
-	/* 默认显示 */
+	display: none !important;
+	/* 默认隐藏，游戏开始后才显示 */
 	position: fixed;
 	bottom: 0;
 	left: 0;
@@ -393,6 +397,11 @@ input#your_link {
 	-webkit-transform: translateZ(9999px);
 	/* 强制开启 GPU 独立复合层 */
 	transform: translateZ(9999px);
+}
+
+/* 游戏开始后显示控制键 */
+#mobile_controls.game-started {
+	display: block !important;
 }
 
 .dpad-btn {
