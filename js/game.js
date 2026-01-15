@@ -783,6 +783,11 @@ window.onload = function () {
 		var frameDirty = false;
 		function update() {
 
+			// 如果游戏还未开始（未点击开始按钮），则不更新游戏逻辑
+			if (!GAME_STARTED && STAGE == 1) {
+				return;
+			}
+
 			if (STAGE == 0 || STAGE == 1) {
 				if (level) {
 					level.update();
@@ -897,6 +902,8 @@ var STAGE = 1;
 // 4 - I HEART YOU
 // 5 - End screen
 
+var GAME_STARTED = false; // 游戏是否已开始（点击开始按钮后）
+
 function next() {
 	CURRENT_LEVEL++;
 	if (CURRENT_LEVEL < LEVEL_CONFIG.length) {
@@ -973,9 +980,15 @@ function iHeartYou() {
 		vtext.textContent = "🍁，1.23 Happy Birthday ，❤️ you 	";
 	}
 
+	// 先触发字间距动画
 	setTimeout(function () {
 		vtext.style.letterSpacing = "3px";
 	}, 10);
+
+	// 随着音乐慢慢放大（jazz音乐已在之前播放）
+	setTimeout(function () {
+		vtext.classList.add("grow-animation");
+	}, 500);
 
 	// After 9 seconds, swipe down to CREDITS.
 	// 游戏结束后不跳转到结束页面，直接停留在当前页面

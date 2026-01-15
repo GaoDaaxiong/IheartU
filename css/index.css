@@ -77,6 +77,29 @@ canvas.locked {
 	justify-content: center;
 	overflow: visible;
 	/* 允许溢出，防止缩放裁剪 */
+	flex-wrap: nowrap;
+}
+
+/* 竖屏回放模式：上3下2布局 */
+#canvas_container.portrait-replay {
+	width: 940px; /* 3 * 300 + 2 * 20 gap */
+	height: auto;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-content: center;
+	gap: 15px;
+}
+
+#canvas_container.portrait-replay canvas {
+	margin: 0 !important;
+	flex-shrink: 0;
+}
+
+/* 下排两个canvas居中 */
+#canvas_container.portrait-replay canvas:nth-child(4),
+#canvas_container.portrait-replay canvas:nth-child(5) {
+	margin-left: 0;
+	margin-right: 0;
 }
 
 #valentines_text,
@@ -84,7 +107,7 @@ canvas.locked {
 #replay_text {
 	display: none;
 	position: absolute;
-	bottom: 0;
+	bottom: -60px;
 	width: 100%;
 	height: 50px;
 	color: #666;
@@ -92,11 +115,17 @@ canvas.locked {
 	text-align: center;
 	letter-spacing: 0px;
 
-	-webkit-transition: letter-spacing 5s ease-out;
-	-moz-transition: letter-spacing 5s ease-out;
-	-ms-transition: letter-spacing 5s ease-out;
-	transition: letter-spacing 5s ease-out;
+	-webkit-transition: letter-spacing 5s ease-out, transform 8s ease-out, font-size 8s ease-out;
+	-moz-transition: letter-spacing 5s ease-out, transform 8s ease-out, font-size 8s ease-out;
+	-ms-transition: letter-spacing 5s ease-out, transform 8s ease-out, font-size 8s ease-out;
+	transition: letter-spacing 5s ease-out, transform 8s ease-out, font-size 8s ease-out;
+	transform-origin: center center;
 
+}
+
+#valentines_text.grow-animation {
+	transform: scale(1.2);
+	font-size: 36px;
 }
 
 #rewind_text,
@@ -104,6 +133,13 @@ canvas.locked {
 	color: #ccc;
 	letter-spacing: 2px;
 	/*text-align: left;*/
+}
+
+/* 竖屏回放模式下的文字位置调整 */
+.portrait-replay #valentines_text,
+.portrait-replay #rewind_text,
+.portrait-replay #replay_text {
+	bottom: -80px;
 }
 
 #end_container {

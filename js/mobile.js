@@ -20,6 +20,11 @@
             // Audio Unlock
             createjs.Sound.play("ding", { volume: 0.01 });
 
+            // 启动游戏
+            if (window.GAME_STARTED !== undefined) {
+                window.GAME_STARTED = true;
+            }
+
             overlay.style.opacity = "0";
             setTimeout(function () { overlay.style.display = "none"; }, 500);
 
@@ -72,27 +77,59 @@
     // ============================================
     function handleResize() {
         canvasContainer = document.getElementById("canvas_container");
+        var mobileControls = document.getElementById("mobile_controls");
         if (!canvasContainer) return;
 
         var isPortrait = window.innerHeight > window.innerWidth;
         var screenW = window.innerWidth;
         var screenH = window.innerHeight;
+        var stage = window.STAGE || 1;
+
+        // 回放/重映阶段 (STAGE 2 或 3) 隐藏方向控制
+        if (mobileControls) {
+            if (stage === 2 || stage === 3 || stage === 4) {
+                mobileControls.style.display = "none";
+            } else if (screenW < 1100) {
+                mobileControls.style.display = "block";
+            }
+        }
 
         if (isPortrait) {
-            // PORTRAIT: Show current level
-            var targetW = 300;
-            var targetH = 380;
-            var scale = Math.min(screenW / targetW, (screenH / 2) / targetH) * 0.82;
+            // 竖屏回放/重映模式：上3下2布局
+            if (stage === 2 || stage === 3 || stage === 4) {
+                canvasContainer.classList.add("portrait-replay");
+                
+                // 计算缩放：3个canvas一行的宽度 (300*3 + 15*2 gap = 930)
+                var canvasW = 300;
+                var canvasH = 380;
+                var gap = 15;
+                var rowWidth = canvasW * 3 + gap * 2;
+                var totalHeight = canvasH * 2 + gap;
+                
+                var scaleX = (screenW * 0.95) / rowWidth;
+                var scaleY = (screenH * 0.90) / totalHeight;
+                var scale = Math.min(scaleX, scaleY);
+                
+                canvasContainer.style.transformOrigin = "center center";
+                canvasContainer.style.transform = "translate(-50%, -50%) scale(" + scale + ")";
+            } else {
+                // PORTRAIT 游戏模式: Show current level
+                canvasContainer.classList.remove("portrait-replay");
+                
+                var targetW = 300;
+                var targetH = 380;
+                var scale = Math.min(screenW / targetW, (screenH / 2) / targetH) * 0.82;
 
-            var idx = window.CURRENT_LEVEL || 0;
-            var currentLevelCenter = idx * 320 + 150;
-            var slideX = 790 - currentLevelCenter;
+                var idx = window.CURRENT_LEVEL || 0;
+                var currentLevelCenter = idx * 320 + 150;
+                var slideX = 790 - currentLevelCenter;
 
-            canvasContainer.style.transformOrigin = "center center";
-            canvasContainer.style.transform = "translate(-50%, -50%) scale(" + scale + ") translateY(-22vh) translateX(" + slideX + "px)";
-
+                canvasContainer.style.transformOrigin = "center center";
+                canvasContainer.style.transform = "translate(-50%, -50%) scale(" + scale + ") translateY(-22vh) translateX(" + slideX + "px)";
+            }
         } else {
             // LANDSCAPE: Show all 5 levels side-by-side
+            canvasContainer.classList.remove("portrait-replay");
             var targetW = 1580;
             var targetH = 380;
             var scale = Math.min(screenW / targetW, screenH / targetH) * 0.95;
@@ -101,30 +138,21 @@
     }
 
     // ============================================
-    // 4. Finish Prompt Logic
+    // 4. Finish Prompt Logic (竖屏模式下直接开始回放)
     // ============================================
     window.showFinishPrompt = function () {
-        var overlay = document.getElementById("finish_overlay");
-        if (overlay) overlay.style.display = "flex";
+        // 竖屏模式下直接开始回放，不再要求横屏
+        // Audio Priming for Mobile/iOS
+        try {
+            createjs.Sound.play("rewind", { volume: 0 }).stop();
+            createjs.Sound.play("jazz", { volume: 0 }).stop();
+            createjs.Sound.play("unlock", { volume: 0 }).stop();
+        } catch (e) { console.log("Audio priming skipped"); }
 
-        var btn = document.getElementById("confirm_finish_btn");
-        btn.onclick = function () {
-            if (window.innerHeight < window.innerWidth) {
-                overlay.style.display = "none";
-
-                // Audio Priming for Mobile/iOS
-                // Play and immediately stop or play with 0 volume to unlock context
-                try {
-                    createjs.Sound.play("rewind", { volume: 0 }).stop();
-                    createjs.Sound.play("jazz", { volume: 0 }).stop();
-                    createjs.Sound.play("unlock", { volume: 0 }).stop();
-                } catch (e) { console.log("Audio priming skipped"); }
-
-                if (window.triggerRewind) window.triggerRewind();
-            } else {
-                alert("请先将手机旋转至横屏，再点击确定哦！");
-            }
-        };
+        if (window.triggerRewind) window.triggerRewind();
+        
+        // 触发布局更新
+        setTimeout(handleResize, 100);
     };
 
     // ============================================
@@ -170,9 +198,16 @@
         window.addEventListener("resize", handleResize);
 
         var lastLvl = -1;
+        var lastStage = -1;
         setInterval(function () {
+            // 监听关卡变化
             if (window.CURRENT_LEVEL !== lastLvl) {
                 lastLvl = window.CURRENT_LEVEL;
+                handleResize();
+            }
+            // 监听阶段变化（进入回放/重映时更新布局）
+            if (window.STAGE !== lastStage) {
+                lastStage = window.STAGE;
                 handleResize();
             }
         }, 100);
